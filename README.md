@@ -204,3 +204,7 @@ Check the backend CORS environment settings and make sure the frontend origin is
 ### Frontend cannot connect to simulations
 
 Make sure the backend is running on `localhost:8080`. The frontend currently hardcodes that backend address in its simulation URL configuration file.
+
+### Screenshots
+<img width="1111" height="633" alt="image" src="https://github.com/user-attachments/assets/422a3a0d-26b7-4796-bcc0-c03b2890d043" />
+
