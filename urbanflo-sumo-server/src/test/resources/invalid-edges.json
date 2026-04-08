@@ -1,0 +1,276 @@
+{
+  "documentName": "invalid-edges",
+  "nodes": [
+    {
+      "id": "h3to4dntqx",
+      "x": 942,
+      "y": 363,
+      "type": "priority"
+    },
+    {
+      "id": "g1j2yhk96k",
+      "x": 570,
+      "y": 360,
+      "type": "priority"
+    },
+    {
+      "id": "j8y6e8wxhr",
+      "x": 1221,
+      "y": 371,
+      "type": "priority"
+    },
+    {
+      "id": "uaek4h9egd",
+      "x": 943,
+      "y": 564,
+      "type": "priority"
+    }
+  ],
+  "edges": [
+    {
+      "id": "g1j2yhk96k_h3to4dntqx",
+      "from": "g1j2yhk96k",
+      "to": "h3to4dntqx",
+      "priority": -1,
+      "numLanes": -1,
+      "spreadType": "center",
+      "width": 25,
+      "speed": -1,
+      "name": "New Road"
+    },
+    {
+      "id": "h3to4dntqx_g1j2yhk96k",
+      "from": "h3to4dntqx",
+      "to": "g1j2yhk96k",
+      "priority": -1,
+      "numLanes": 1,
+      "spreadType": "center",
+      "width": 25,
+      "speed": 13.89,
+      "name": "New Road"
+    },
+    {
+      "id": "uaek4h9egd_h3to4dntqx",
+      "from": "uaek4h9egd",
+      "to": "h3to4dntqx",
+      "priority": -1,
+      "numLanes": 1,
+      "spreadType": "center",
+      "width": 25,
+      "speed": 13.89,
+      "name": "New Road"
+    },
+    {
+      "id": "h3to4dntqx_uaek4h9egd",
+      "from": "h3to4dntqx",
+      "to": "uaek4h9egd",
+      "priority": -1,
+      "numLanes": 1,
+      "spreadType": "center",
+      "width": 25,
+      "speed": 13.89,
+      "name": "New Road"
+    },
+    {
+      "id": "j8y6e8wxhr_h3to4dntqx",
+      "from": "j8y6e8wxhr",
+      "to": "h3to4dntqx",
+      "priority": -1,
+      "numLanes": 1,
+      "spreadType": "center",
+      "width": 25,
+      "speed": 13.89,
+      "name": "New Road"
+    },
+    {
+      "id": "h3to4dntqx_j8y6e8wxhr",
+      "from": "h3to4dntqx",
+      "to": "j8y6e8wxhr",
+      "priority": -1,
+      "numLanes": 1,
+      "spreadType": "center",
+      "width": 25,
+      "speed": 13.89,
+      "name": "New Road"
+    }
+  ],
+  "connections": [
+    {
+      "from": "g1j2yhk96k_h3to4dntqx",
+      "to": "h3to4dntqx_g1j2yhk96k",
+      "fromLane": 0,
+      "toLane": 0
+    },
+    {
+      "from": "uaek4h9egd_h3to4dntqx",
+      "to": "h3to4dntqx_g1j2yhk96k",
+      "fromLane": 0,
+      "toLane": 0
+    },
+    {
+      "from": "g1j2yhk96k_h3to4dntqx",
+      "to": "h3to4dntqx_uaek4h9egd",
+      "fromLane": 0,
+      "toLane": 0
+    },
+    {
+      "from": "uaek4h9egd_h3to4dntqx",
+      "to": "h3to4dntqx_uaek4h9egd",
+      "fromLane": 0,
+      "toLane": 0
+    },
+    {
+      "from": "j8y6e8wxhr_h3to4dntqx",
+      "to": "h3to4dntqx_g1j2yhk96k",
+      "fromLane": 0,
+      "toLane": 0
+    },
+    {
+      "from": "j8y6e8wxhr_h3to4dntqx",
+      "to": "h3to4dntqx_uaek4h9egd",
+      "fromLane": 0,
+      "toLane": 0
+    },
+    {
+      "from": "g1j2yhk96k_h3to4dntqx",
+      "to": "h3to4dntqx_j8y6e8wxhr",
+      "fromLane": 0,
+      "toLane": 0
+    },
+    {
+      "from": "uaek4h9egd_h3to4dntqx",
+      "to": "h3to4dntqx_j8y6e8wxhr",
+      "fromLane": 0,
+      "toLane": 0
+    },
+    {
+      "from": "j8y6e8wxhr_h3to4dntqx",
+      "to": "h3to4dntqx_j8y6e8wxhr",
+      "fromLane": 0,
+      "toLane": 0
+    }
+  ],
+  "vType": [
+    {
+      "id": "car",
+      "accel": 2.6,
+      "decel": 4.5,
+      "sigma": 1,
+      "length": 5,
+      "minGap": 2.5,
+      "maxSpeed": 30
+    }
+  ],
+  "route": [
+    {
+      "id": "g1j2yhk96k_to_g1j2yhk96k",
+      "edges": "g1j2yhk96k_h3to4dntqx h3to4dntqx_g1j2yhk96k"
+    },
+    {
+      "id": "uaek4h9egd_to_g1j2yhk96k",
+      "edges": "uaek4h9egd_h3to4dntqx h3to4dntqx_g1j2yhk96k"
+    },
+    {
+      "id": "g1j2yhk96k_to_uaek4h9egd",
+      "edges": "g1j2yhk96k_h3to4dntqx h3to4dntqx_uaek4h9egd"
+    },
+    {
+      "id": "uaek4h9egd_to_uaek4h9egd",
+      "edges": "uaek4h9egd_h3to4dntqx h3to4dntqx_uaek4h9egd"
+    },
+    {
+      "id": "j8y6e8wxhr_to_g1j2yhk96k",
+      "edges": "j8y6e8wxhr_h3to4dntqx h3to4dntqx_g1j2yhk96k"
+    },
+    {
+      "id": "j8y6e8wxhr_to_uaek4h9egd",
+      "edges": "j8y6e8wxhr_h3to4dntqx h3to4dntqx_uaek4h9egd"
+    },
+    {
+      "id": "g1j2yhk96k_to_j8y6e8wxhr",
+      "edges": "g1j2yhk96k_h3to4dntqx h3to4dntqx_j8y6e8wxhr"
+    },
+    {
+      "id": "uaek4h9egd_to_j8y6e8wxhr",
+      "edges": "uaek4h9egd_h3to4dntqx h3to4dntqx_j8y6e8wxhr"
+    },
+    {
+      "id": "j8y6e8wxhr_to_j8y6e8wxhr",
+      "edges": "j8y6e8wxhr_h3to4dntqx h3to4dntqx_j8y6e8wxhr"
+    }
+  ],
+  "flow": [
+    {
+      "id": "flow_g1j2yhk96k_h3to4dntqxh3to4dntqx_g1j2yhk96k",
+      "type": "car",
+      "route": "g1j2yhk96k_to_g1j2yhk96k",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    },
+    {
+      "id": "flow_uaek4h9egd_h3to4dntqxh3to4dntqx_g1j2yhk96k",
+      "type": "car",
+      "route": "uaek4h9egd_to_g1j2yhk96k",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    },
+    {
+      "id": "flow_g1j2yhk96k_h3to4dntqxh3to4dntqx_uaek4h9egd",
+      "type": "car",
+      "route": "g1j2yhk96k_to_uaek4h9egd",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    },
+    {
+      "id": "flow_uaek4h9egd_h3to4dntqxh3to4dntqx_uaek4h9egd",
+      "type": "car",
+      "route": "uaek4h9egd_to_uaek4h9egd",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    },
+    {
+      "id": "flow_j8y6e8wxhr_h3to4dntqxh3to4dntqx_g1j2yhk96k",
+      "type": "car",
+      "route": "j8y6e8wxhr_to_g1j2yhk96k",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    },
+    {
+      "id": "flow_j8y6e8wxhr_h3to4dntqxh3to4dntqx_uaek4h9egd",
+      "type": "car",
+      "route": "j8y6e8wxhr_to_uaek4h9egd",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    },
+    {
+      "id": "flow_g1j2yhk96k_h3to4dntqxh3to4dntqx_j8y6e8wxhr",
+      "type": "car",
+      "route": "g1j2yhk96k_to_j8y6e8wxhr",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    },
+    {
+      "id": "flow_uaek4h9egd_h3to4dntqxh3to4dntqx_j8y6e8wxhr",
+      "type": "car",
+      "route": "uaek4h9egd_to_j8y6e8wxhr",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    },
+    {
+      "id": "flow_j8y6e8wxhr_h3to4dntqxh3to4dntqx_j8y6e8wxhr",
+      "type": "car",
+      "route": "j8y6e8wxhr_to_j8y6e8wxhr",
+      "begin": 0,
+      "end": 86400,
+      "vehsPerHour": 1000
+    }
+  ]
+}

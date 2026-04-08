@@ -1,0 +1,23 @@
+import { ArrowDownTrayIcon } from '@heroicons/react/20/solid';
+
+import { handleDownloadEvent } from '~/helpers/zustand/NetworkStoreHelpers.ts';
+import useJsonDownloader from '~/hooks/useJsonDownloader';
+import { useNetworkStore } from '~/zustand/useNetworkStore';
+
+export function ProjectDownloadButton() {
+  const downloadJson = useJsonDownloader();
+  const network = useNetworkStore();
+  
+  function handleDownloadClick() {
+    handleDownloadEvent(downloadJson, network);
+  }
+
+  return (
+    <button
+      className="text-sm font-semibold bg-green-500 leading-6 items-center rounded-full flex py-2 px-4 mt-4"
+      onClick={handleDownloadClick}
+    >
+      <ArrowDownTrayIcon className="h-6 w-6 ml-2" aria-hidden="true" />
+    </button>
+  );
+}

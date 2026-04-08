@@ -1,0 +1,12 @@
+services:
+  sumo-server:
+    image: ghcr.io/igloo-4002/urbanflo-sumo-server:develop
+    build:
+      context: .
+    ports:
+      - 8080:80
+    volumes:
+      - uploads:/opt/urbanflo-sumo-server/uploads
+    restart: unless-stopped
+volumes:
+  uploads:

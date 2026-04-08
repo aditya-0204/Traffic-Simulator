@@ -1,0 +1,12 @@
+<routes>
+    <vType id="car" accel="0.1" decel="2.5" sigma="0.5" length="5" minGap="3.5" maxSpeed="10"/>
+
+    <route id="east_to_north" edges="east_center center_north"/>
+    <route id="east_to_south" edges="east_center center_south"/>
+    <route id="south_to_north" edges="south_center center_north"/>
+
+    <!-- this always be sorted in increasing departure time -->
+    <flow id="flow_straight" type="car" route="south_to_north" begin="0" end="86400" vehsPerHour="20"/>
+    <flow id="flow_north" type="car" route="east_to_north" begin="4" end="86400" vehsPerHour="5"/>
+    <flow id="flow_south" type="car" route="east_to_south" begin="4" end="86400" vehsPerHour="10"/>
+</routes>
