@@ -1,11 +1,13 @@
-# CPS - UrbanFlo Traffic Simulation Platform
+# Registration No - 23BPS1185 23BPS1146
 
-UrbanFlo is a full-stack traffic simulation project for designing road networks, running SUMO-based simulations, and reviewing simulation history and output statistics through a visual web interface.
+# Traffic Simulation Project
+
+This is a full-stack traffic simulation project for designing road networks, running SUMO-based simulations, and reviewing simulation history and output statistics through a visual web interface.
 
 This repository contains:
 
-- `urbanflo-vite`: the React + Vite frontend used to design networks and visualize simulation results
-- `urbanflo-sumo-server`: the Kotlin + Spring Boot backend that stores networks, starts SUMO simulations, and exposes REST/WebSocket APIs
+- a React + Vite frontend used to design networks and visualize simulation results
+- a Kotlin + Spring Boot backend that stores networks, starts SUMO simulations, and exposes REST/WebSocket APIs
 
 ## Project Overview
 
@@ -45,12 +47,12 @@ The frontend is currently desktop-focused. Mobile devices are intentionally bloc
 ## Repository Structure
 
 ```text
-CPS/
-|-- urbanflo-vite/           # Frontend application
+project-root/
+|-- frontend/               # Frontend application
 |   |-- src/
 |   |-- docs/
 |   `-- package.json
-|-- urbanflo-sumo-server/    # Backend application
+|-- backend/                # Backend application
 |   |-- src/
 |   |-- demo/
 |   `-- build.gradle.kts
@@ -86,7 +88,7 @@ The backend depends on SUMO's Java/native integration. If `libtracijni` is missi
 From the repository root:
 
 ```powershell
-Set-Location .\urbanflo-sumo-server
+Set-Location .\<backend-directory>
 .\gradlew.bat bootRun
 ```
 
@@ -100,7 +102,7 @@ The backend uses:
 Open a second terminal:
 
 ```powershell
-Set-Location .\urbanflo-vite
+Set-Location .\<frontend-directory>
 npm install
 npm run dev
 ```
@@ -109,7 +111,7 @@ Then open the Vite URL shown in the terminal, typically `http://localhost:5173`.
 
 ## Frontend Commands
 
-Run these inside `urbanflo-vite`:
+Run these inside the frontend directory:
 
 ```powershell
 npm install
@@ -122,7 +124,7 @@ npm run type-check
 
 ## Backend Commands
 
-Run these inside `urbanflo-sumo-server`:
+Run these inside the backend directory:
 
 ```powershell
 .\gradlew.bat build
@@ -134,20 +136,20 @@ You can also build a runnable jar:
 
 ```powershell
 .\gradlew.bat build
-java -jar .\build\libs\urbanflo-sumo-server-0.0.1-SNAPSHOT.jar
+java -jar .\build\libs\<server-jar-name>.jar
 ```
 
 ## Environment and Configuration
 
 The backend exposes a few useful environment variables:
 
-- `urbanflo_FRONTEND_URL`: allowed frontend origin for CORS, defaults to `http://localhost:5173`
-- `urbanflo_ALLOW_ALL_CORS_ORIGINS`: set to `true` to allow all origins
+- frontend URL CORS setting: defaults to `http://localhost:5173`
+- allow-all-origins CORS setting: can be enabled for local testing
 
 If SUMO native libraries are not already on your system path, you may need to launch Java with:
 
 ```powershell
-java -Djava.library.path="C:\path\to\sumo\bin" -jar .\build\libs\urbanflo-sumo-server-0.0.1-SNAPSHOT.jar
+java -Djava.library.path="C:\path\to\sumo\bin" -jar .\build\libs\<server-jar-name>.jar
 ```
 
 ## Main API Endpoints
@@ -185,9 +187,9 @@ java -Djava.library.path="C:\path\to\sumo\bin" -jar .\build\libs\urbanflo-sumo-s
 
 Additional project docs already in the repository:
 
-- frontend user guide: `urbanflo-vite/docs/user-guide.md`
-- frontend references: `urbanflo-vite/RESOURCES.md`
-- backend README: `urbanflo-sumo-server/README.md`
+- frontend user guide: `docs/user-guide.md` inside the frontend directory
+- frontend references: `RESOURCES.md` inside the frontend directory
+- backend README: `README.md` inside the backend directory
 
 ## Troubleshooting
 
@@ -197,11 +199,11 @@ SUMO native libraries are not being found. Add the SUMO `bin` directory containi
 
 ### Frontend shows CORS errors
 
-Check `urbanflo_FRONTEND_URL` or set `urbanflo_ALLOW_ALL_CORS_ORIGINS=true` for local testing.
+Check the backend CORS environment settings and make sure the frontend origin is allowed.
 
 ### Frontend cannot connect to simulations
 
-Make sure the backend is running on `localhost:8080`. The frontend currently hardcodes that backend address in `urbanflo-vite/src/simulation-urls.ts`.
+Make sure the backend is running on `localhost:8080`. The frontend currently hardcodes that backend address in its simulation URL configuration file.
 
 ## Notes
 
