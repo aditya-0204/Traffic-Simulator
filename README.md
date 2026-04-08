@@ -204,9 +204,3 @@ Check the backend CORS environment settings and make sure the frontend origin is
 ### Frontend cannot connect to simulations
 
 Make sure the backend is running on `localhost:8080`. The frontend currently hardcodes that backend address in its simulation URL configuration file.
-
-## Notes
-
-- The frontend is designed for desktop screens.
-- The backend includes Docker-related files, but local development is easiest when SUMO is correctly installed on the host machine.
-- Some simulation/output endpoints only return data after a run has completed successfully.
