@@ -174,13 +174,28 @@ class SimulationInstance(
      * Returns the vehicle colour (in HTML hex format) for the vehicle ID, or generates one if it's not yet assigned.
      */
     private fun getVehicleColor(vehicleId: String): String {
-        // if let color = vehicleColors[vehicleId] { return color } else { assign random colour to vehicle and return }
+        // Keep colors stable across frames so emergency vehicles stay visually consistent.
         val color = vehicleColors[vehicleId] ?: run {
-            val newColor = "#ffff00"
+            val typeId = runCatching { Vehicle.getTypeID(vehicleId) }.getOrDefault("")
+            val newColor = when {
+                isFireBrigadeVehicle(vehicleId, typeId) -> "#2563eb"
+                isAmbulanceVehicle(vehicleId, typeId) -> "#16a34a"
+                else -> "#ef4444"
+            }
             vehicleColors[vehicleId] = newColor
             newColor
         }
         return color
+    }
+
+    private fun isFireBrigadeVehicle(vehicleId: String, typeId: String): Boolean {
+        val value = "${vehicleId.lowercase()} ${typeId.lowercase()}"
+        return "firebrigade" in value || "fire_brigade" in value || "fire-brigade" in value || "fire" in value
+    }
+
+    private fun isAmbulanceVehicle(vehicleId: String, typeId: String): Boolean {
+        val value = "${vehicleId.lowercase()} ${typeId.lowercase()}"
+        return "ambulance" in value
     }
 
     /**

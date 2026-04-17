@@ -16,6 +16,7 @@ import {
 import { extractCarsFromSumoMessage } from '~/helpers/sumo';
 import { networkHasData } from '~/helpers/zustand/NetworkStoreHelpers';
 import { useSimulation } from '~/hooks/useSimulation';
+import { buildSimulationPayload } from '~/logic/simulation-payload';
 import {
   BASE_SIMULATION_DATA_TOPIC,
   BASE_SIMULATION_DESTINATION_PATH,
@@ -85,26 +86,7 @@ export const FloatingPlayPause = () => {
   const handleUpload = async () => {
     try {
       setLoading(true);
-
-      const requestBody = {
-        documentName: network.documentName,
-        nodes: Object.values(network.nodes),
-        edges: Object.values(network.edges),
-        connections: Object.values(network.connections),
-        vType: [
-          {
-            id: 'car',
-            accel: 2.6,
-            decel: 4.5,
-            sigma: 1,
-            length: 5,
-            minGap: 2.5,
-            maxSpeed: 30,
-          },
-        ],
-        route: Object.values(network.route),
-        flow: Object.values(network.flow),
-      };
+      const requestBody = buildSimulationPayload(network);
 
       const simInfo = await uploadNetwork(requestBody);
       setStartTime(new Date().toISOString());

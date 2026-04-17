@@ -48,11 +48,11 @@ The frontend is currently desktop-focused. Mobile devices are intentionally bloc
 
 ```text
 project-root/
-|-- frontend/               # Frontend application
+|-- vite/                   # Frontend application
 |   |-- src/
 |   |-- docs/
 |   `-- package.json
-|-- backend/                # Backend application
+|-- sumo-server/            # Backend application
 |   |-- src/
 |   |-- demo/
 |   `-- build.gradle.kts
@@ -88,7 +88,8 @@ The backend depends on SUMO's Java/native integration. If `libtracijni` is missi
 From the repository root:
 
 ```powershell
-Set-Location .\<backend-directory>
+Set-Location .\sumo-server
+$env:PATH="C:\Program Files (x86)\Eclipse\Sumo\bin;$env:PATH"
 .\gradlew.bat bootRun
 ```
 
@@ -102,7 +103,7 @@ The backend uses:
 Open a second terminal:
 
 ```powershell
-Set-Location .\<frontend-directory>
+Set-Location .\vite
 npm install
 npm run dev
 ```
@@ -127,8 +128,11 @@ npm run type-check
 Run these inside the backend directory:
 
 ```powershell
+$env:PATH="C:\Program Files (x86)\Eclipse\Sumo\bin;$env:PATH"
 .\gradlew.bat build
+$env:PATH="C:\Program Files (x86)\Eclipse\Sumo\bin;$env:PATH"
 .\gradlew.bat test
+$env:PATH="C:\Program Files (x86)\Eclipse\Sumo\bin;$env:PATH"
 .\gradlew.bat bootRun
 ```
 
@@ -145,6 +149,8 @@ The backend exposes a few useful environment variables:
 
 - frontend URL CORS setting: defaults to `http://localhost:5173`
 - allow-all-origins CORS setting: can be enabled for local testing
+
+The backend wrapper now defaults `GRADLE_USER_HOME` to a local `.gradle-user` directory inside `sumo-server` when the variable is not already set. This avoids Windows permission issues with a locked global Gradle cache.
 
 If SUMO native libraries are not already on your system path, you may need to launch Java with:
 
@@ -196,6 +202,10 @@ Additional project docs already in the repository:
 ### Backend fails with `UnsatisfiedLinkError`
 
 SUMO native libraries are not being found. Add the SUMO `bin` directory containing `libtracijni` to your system path, or pass it through `-Djava.library.path`.
+
+### Backend fails before Spring Boot starts with a Gradle cache or lock-file error
+
+Run the backend from `sumo-server` using the checked-in wrapper. The wrapper is configured to use a local `.gradle-user` directory by default, which avoids permission issues with `C:\Users\...\ .gradle`.
 
 ### Frontend shows CORS errors
 

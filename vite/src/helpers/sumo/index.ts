@@ -17,6 +17,24 @@ export type SumoMessage = {
   };
 };
 
+function getVehicleColor(vehicleId: string, color?: string) {
+  if (color && color.trim().length > 0) {
+    return color;
+  }
+
+  const normalizedId = vehicleId.toLowerCase();
+
+  if (normalizedId.includes('firebrigade') || normalizedId.includes('fire_brigade') || normalizedId.includes('fire-brigade') || normalizedId.includes('fire')) {
+    return '#2563eb';
+  }
+
+  if (normalizedId.includes('ambulance')) {
+    return '#16a34a';
+  }
+
+  return '#ef4444';
+}
+
 /**
  * Extracts and transforms cars from a SUMO message to match the required Car format.
  * @param {string} sumoMessage - The SUMO message as a JSON string.
@@ -48,7 +66,7 @@ export function extractCarsFromSumoMessage(sumoMessage: string): Car[] {
         x: vehicle.position.first,
         y: vehicle.position.second,
       },
-      color: 'red', // we accept the fact that SUMO may not return this since its not too important
+      color: getVehicleColor(vehicle.vehicleId ?? vehicleId, vehicle.color),
     });
   }
 
