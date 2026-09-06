@@ -55,6 +55,13 @@ class SimulationController(
             SimulationMessageType.START -> {
                 logger.info { "Simulation $idTrim with session ID $sessionId started" }
                 try {
+                    val existingDisposable = disposables[sessionId]
+                    if (existingDisposable != null && !existingDisposable.isDisposed) {
+                        logger.info { "Simulation $idTrim with session ID $sessionId is already running" }
+                        return
+                    }
+
+                    existingDisposable?.dispose()
                     val simulationInstance = instances[sessionId] ?: run {
                         val newSimulation = storageService.load(idTrim, sessionId)
                         instances[sessionId] = newSimulation

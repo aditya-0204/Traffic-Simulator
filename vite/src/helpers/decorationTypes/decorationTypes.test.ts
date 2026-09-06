@@ -16,6 +16,18 @@ describe('toolbarItemToDecoration', () => {
     expect(output).toBe('building');
   });
 
+  it('should return "flyover" for the "Flyover" label', () => {
+    const input: LabelNamesType = 'Flyover';
+    const output: DecorationTypeNames = toolbarItemToDecoration(input);
+    expect(output).toBe('flyover');
+  });
+
+  it('should return "roundabout" for the "Roundabout" label', () => {
+    const input: LabelNamesType = 'Roundabout';
+    const output: DecorationTypeNames = toolbarItemToDecoration(input);
+    expect(output).toBe('roundabout');
+  });
+
   it('should throw an error for invalid decoration types', () => {
     const invalidInput: LabelNamesType = 'InvalidLabel' as LabelNamesType;
     expect(() => toolbarItemToDecoration(invalidInput)).toThrowError(

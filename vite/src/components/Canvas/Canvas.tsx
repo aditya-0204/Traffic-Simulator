@@ -22,9 +22,11 @@ import { useToolbarStore } from '~/zustand/useToolbar';
 import { useUndoStore } from '~/zustand/useUndoStore';
 
 import { CarLayer } from './Layers/CarLayer';
+import { CongestionLayer } from './Layers/CongestionLayer';
 import { DecorationsLayer } from './Layers/DecorationsLayer';
 import { IntersectionsLayer } from './Layers/IntersectionsLayer';
 import { RoadsLayer } from './Layers/RoadsLayer';
+import { TrafficCountLayer } from './Layers/TrafficCountLayer';
 
 export function Canvas() {
   const selector = useSelector();
@@ -95,6 +97,9 @@ export function Canvas() {
       }
 
       const point = event.currentTarget.getRelativePointerPosition();
+      if (!point) {
+        return;
+      }
 
       const decorationType = toolbarItemToDecoration(
         toolbarState.selectedToolBarItem,
@@ -112,7 +117,12 @@ export function Canvas() {
     }
 
     if (
-      ![LabelNames.Road, LabelNames.Intersection].includes(
+      ![
+        LabelNames.Road,
+        LabelNames.Intersection,
+        LabelNames.Roundabout,
+        LabelNames.Flyover,
+      ].includes(
         // @ts-expect-error - Typescript thinks we are trying to assign, but really we are checking if it exists in the array
         toolbarState.selectedToolBarItem,
       )
@@ -125,6 +135,9 @@ export function Canvas() {
     }
 
     const point = event.currentTarget.getRelativePointerPosition();
+    if (!point) {
+      return;
+    }
 
     const conflict = nodes.find(node => {
       const distance = Math.sqrt(
@@ -135,11 +148,18 @@ export function Canvas() {
     });
 
     if (conflict === undefined) {
+      const nodeType =
+        toolbarState.selectedToolBarItem === LabelNames.Roundabout
+          ? NodeType.roundabout
+          : toolbarState.selectedToolBarItem === LabelNames.Flyover
+            ? NodeType.flyover
+            : NodeType.priority;
+
       const newNode = {
         id: createId(),
         x: point.x,
         y: point.y,
-        type: NodeType.priority,
+        type: nodeType,
       };
 
       network.addNode(newNode);
@@ -193,9 +213,11 @@ export function Canvas() {
       }}
     >
       <RoadsLayer />
+      <CongestionLayer />
       <IntersectionsLayer />
       {/* <ConnectionsLayer /> */}
       <CarLayer />
+      <TrafficCountLayer />
       <DecorationsLayer />
     </Stage>
   );

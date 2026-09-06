@@ -2,13 +2,20 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 
 import { canvasComponentBg } from '~/colors';
 import { networkHasData } from '~/helpers/zustand/NetworkStoreHelpers';
+import { useCarsStore } from '~/zustand/useCarStore';
 import { useNetworkStore } from '~/zustand/useNetworkStore';
+import { usePlaying } from '~/zustand/usePlaying';
 
 export function ClearCanvasButton() {
   const network = useNetworkStore();
+  const carStore = useCarsStore();
+  const player = usePlaying();
 
   function onClear() {
     if (window.confirm('Are you sure you want to delete the network?')) {
+      player.pause();
+      player.changeSimulationId(null);
+      carStore.setCars([]);
       network.clearNetwork();
     }
   }

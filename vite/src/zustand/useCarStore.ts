@@ -5,6 +5,7 @@ import { Point } from '~/types/Network';
 export type Car = {
   location: Point;
   color: string;
+  speed: number;
 };
 
 type CarsState = {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CircleLoader } from 'react-spinners';
 
 import {
@@ -30,12 +30,48 @@ import { useNetworkStore } from '~/zustand/useNetworkStore';
 import { usePlaying } from '~/zustand/usePlaying';
 import { useSimulationHistory } from '~/zustand/useSimulationHistory';
 
+const OUTPUT_RETRY_DELAY_MS = 1500;
+const OUTPUT_RETRY_ATTEMPTS = 10;
+const STOP_SETTLE_DELAY_MS = 2500;
+
+function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function fetchSimulationArtifactsWithRetry(simulationId: string) {
+  let lastError: unknown = null;
+
+  for (let attempt = 1; attempt <= OUTPUT_RETRY_ATTEMPTS; attempt += 1) {
+    try {
+      const [simOutput, simOutputStatistics, simAnalytics] = await Promise.all([
+        getSimulationOutput(simulationId),
+        getSimulationOutputStatistics(simulationId),
+        getSimulationAnalytics(simulationId),
+      ]);
+
+      return {
+        simOutput,
+        simOutputStatistics,
+        simAnalytics,
+      };
+    } catch (error) {
+      lastError = error;
+
+      if (attempt < OUTPUT_RETRY_ATTEMPTS) {
+        await sleep(OUTPUT_RETRY_DELAY_MS);
+      }
+    }
+  }
+
+  throw lastError ?? new Error('Unable to get simulation output');
+}
+
 export const FloatingPlayPause = () => {
   const [loading, setLoading] = useState(false);
   const network = useNetworkStore();
-  const carStore = useCarsStore();
+  const setCars = useCarsStore(state => state.setCars);
   const player = usePlaying();
-  const { subscribe, publish, isConnected, error } = useSimulation({
+  const { subscribe, unsubscribe, publish, isConnected, error } = useSimulation({
     brokerURL: SIMULATION_SOCKET_URL,
   });
 
@@ -46,9 +82,14 @@ export const FloatingPlayPause = () => {
   const [simulationInfo, setSimulationInfo] = useState<SimulationInfo | null>(
     null,
   );
+  const activeSimulationIdRef = useRef<string | null>(null);
 
   // streaming of simulation data
   useEffect(() => {
+    if (!player.simulationId) {
+      return;
+    }
+
     const SIMULATION_DATA_TOPIC = `${BASE_SIMULATION_DATA_TOPIC}/${player.simulationId}`;
     const SIMULATION_ERROR_TOPIC = BASE_SIMULATION_ERROR_TOPIC.replace(
       '_',
@@ -57,13 +98,17 @@ export const FloatingPlayPause = () => {
     const SIMULATION_DESTINATION_PATH = `${BASE_SIMULATION_DESTINATION_PATH}/${player.simulationId}`;
 
     if (player.isPlaying && isConnected) {
+      if (activeSimulationIdRef.current === player.simulationId) {
+        return;
+      }
+
       console.warn('Subscribing to simulation');
 
       subscribe(SIMULATION_DATA_TOPIC, message => {
         const data = extractCarsFromSumoMessage(message);
 
         if (data) {
-          carStore.setCars(data);
+          setCars(data);
         }
       });
       subscribe(SIMULATION_ERROR_TOPIC, message => {
@@ -75,13 +120,15 @@ export const FloatingPlayPause = () => {
       });
 
       publish(SIMULATION_DESTINATION_PATH, { status: 'START' });
-    } else if (!player.isPlaying && isConnected) {
+      activeSimulationIdRef.current = player.simulationId;
+    } else if (!player.isPlaying && isConnected && player.simulationId) {
       console.warn('Unsubscribing from simulation');
       publish(SIMULATION_DESTINATION_PATH, { status: 'STOP' });
-    } else if (!player.isPlaying && player.simulationId) {
-      player.changeSimulationId(null);
+      unsubscribe(SIMULATION_DATA_TOPIC);
+      unsubscribe(SIMULATION_ERROR_TOPIC);
+      activeSimulationIdRef.current = null;
     }
-  }, [player.isPlaying]);
+  }, [errorModal, isConnected, player.isPlaying, player.simulationId, publish, setCars, subscribe, unsubscribe]);
 
   const handleUpload = async () => {
     try {
@@ -91,6 +138,7 @@ export const FloatingPlayPause = () => {
       const simInfo = await uploadNetwork(requestBody);
       setStartTime(new Date().toISOString());
       setSimulationInfo(simInfo);
+      setCars([]);
       player.changeSimulationId(simInfo.id);
       player.play();
     } catch (error) {
@@ -102,20 +150,24 @@ export const FloatingPlayPause = () => {
   };
 
   const handleOutput = async () => {
+    const currentSimulationId = player.simulationId;
+
     try {
       setLoading(true);
       player.pause();
-      carStore.setCars([]);
 
-      if (!player.simulationId) {
+      // Give the backend a moment to process STOP and flush output files.
+      await sleep(STOP_SETTLE_DELAY_MS);
+
+      if (!currentSimulationId) {
         return;
       }
 
-      const [simOutput, simOutputStatistics, simAnalytics] = await Promise.all([
-        getSimulationOutput(player.simulationId),
-        getSimulationOutputStatistics(player.simulationId),
-        getSimulationAnalytics(player.simulationId),
-      ]);
+      const {
+        simOutput,
+        simOutputStatistics,
+        simAnalytics,
+      } = await fetchSimulationArtifactsWithRetry(currentSimulationId);
 
       if (startTime && simulationInfo) {
         simulationHistory.updateHistory({
@@ -136,6 +188,10 @@ export const FloatingPlayPause = () => {
         (error as Error).message,
       );
     } finally {
+      player.changeSimulationId(null);
+      setSimulationInfo(null);
+      setStartTime(null);
+      activeSimulationIdRef.current = null;
       setLoading(false);
     }
   };

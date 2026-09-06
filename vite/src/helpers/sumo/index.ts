@@ -55,8 +55,10 @@ export function extractCarsFromSumoMessage(sumoMessage: string): Car[] {
     const vehicle = parsedJson[vehicleId];
     if (
       !vehicle.position ||
-      !vehicle.position.first ||
-      !vehicle.position.second
+      vehicle.position.first === undefined ||
+      vehicle.position.first === null ||
+      vehicle.position.second === undefined ||
+      vehicle.position.second === null
     ) {
       throw new Error('Response is not in car format');
     }
@@ -67,6 +69,7 @@ export function extractCarsFromSumoMessage(sumoMessage: string): Car[] {
         y: vehicle.position.second,
       },
       color: getVehicleColor(vehicle.vehicleId ?? vehicleId, vehicle.color),
+      speed: vehicle.speed ?? 0,
     });
   }
 

@@ -9,6 +9,10 @@ export function toolbarItemToDecoration(
       return 'tree';
     case 'Building':
       return 'building';
+    case 'Flyover':
+      return 'flyover';
+    case 'Roundabout':
+      return 'roundabout';
     default:
       throw new Error(`${item} is an invalid decoration type`);
   }

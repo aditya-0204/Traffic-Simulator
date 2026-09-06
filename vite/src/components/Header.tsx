@@ -23,7 +23,7 @@ export function Header() {
       >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <h2 className='text-5xl font-semibold'>traffic Simulator</h2>
+            <h2 className='text-5xl font-semibold'>Traffic Simulator</h2>
             {/* <img className="h-10 w-auto" src={Logo} alt="" /> */}
           </a>
           <span className="ml-8 mb-2 flex items-center gap-x-1 text-5xl font-thin leading-6 text-gray-900">

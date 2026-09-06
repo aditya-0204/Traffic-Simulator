@@ -8,7 +8,7 @@ export function CarLayer() {
   const carStore = useCarsStore();
 
   return (
-    <Layer>
+    <Layer listening={false}>
       {carStore.cars.map((car, index) => {
         return <Car car={car} key={index} />;
       })}

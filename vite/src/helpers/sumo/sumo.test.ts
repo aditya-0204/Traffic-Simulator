@@ -37,8 +37,24 @@ describe('extractCarsFromSumoMessage', () => {
     });
     const cars = extractCarsFromSumoMessage(sumoMessage);
     expect(cars).toEqual([
-      { location: { x: 1, y: 2 }, color: '#ef4444' },
-      { location: { x: 3, y: 4 }, color: '#ef4444' },
+      { location: { x: 1, y: 2 }, color: '#ef4444', speed: 0 },
+      { location: { x: 3, y: 4 }, color: '#ef4444', speed: 0 },
+    ]);
+  });
+
+  it('should accept zero coordinates as valid positions', () => {
+    const sumoMessage = JSON.stringify({
+      'vehicle-1': {
+        vehicleId: 'vehicle-1',
+        position: { first: 0, second: 5 },
+        color: '#ef4444',
+        speed: 12,
+      },
+    });
+
+    const cars = extractCarsFromSumoMessage(sumoMessage);
+    expect(cars).toEqual([
+      { location: { x: 0, y: 5 }, color: '#ef4444', speed: 12 },
     ]);
   });
 
@@ -51,7 +67,9 @@ describe('extractCarsFromSumoMessage', () => {
     });
 
     const cars = extractCarsFromSumoMessage(sumoMessage);
-    expect(cars).toEqual([{ location: { x: 1, y: 2 }, color: '#16a34a' }]);
+    expect(cars).toEqual([
+      { location: { x: 1, y: 2 }, color: '#16a34a', speed: 0 },
+    ]);
   });
 
   it('should map fire brigade vehicles to blue when no color is supplied', () => {
@@ -63,6 +81,23 @@ describe('extractCarsFromSumoMessage', () => {
     });
 
     const cars = extractCarsFromSumoMessage(sumoMessage);
-    expect(cars).toEqual([{ location: { x: 3, y: 4 }, color: '#2563eb' }]);
+    expect(cars).toEqual([
+      { location: { x: 3, y: 4 }, color: '#2563eb', speed: 0 },
+    ]);
+  });
+
+  it('should preserve vehicle speed when supplied', () => {
+    const sumoMessage = JSON.stringify({
+      'vehicle-1': {
+        vehicleId: 'vehicle-1',
+        position: { first: 1, second: 2 },
+        speed: 3.5,
+      },
+    });
+
+    const cars = extractCarsFromSumoMessage(sumoMessage);
+    expect(cars).toEqual([
+      { location: { x: 1, y: 2 }, color: '#ef4444', speed: 3.5 },
+    ]);
   });
 });

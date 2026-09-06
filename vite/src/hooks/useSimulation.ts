@@ -147,6 +147,10 @@ export function useSimulation(config: StompConfig, callback?: () => void) {
    * @param {string} path - The destination path to unsubscribe from.
    */
   const unsubscribe = useCallback((path: string) => {
+    if (!subscriptions[path]) {
+      return;
+    }
+
     subscriptions[path].unsubscribe();
     delete subscriptions[path];
   }, []);

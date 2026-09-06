@@ -5,6 +5,8 @@ export type Point = {
 
 export const NodeType = {
   priority: 'priority',
+  roundabout: 'roundabout',
+  flyover: 'flyover',
   traffic_light: 'traffic_light',
   right_before_left: 'right_before_left',
   left_before_right: 'left_before_right',

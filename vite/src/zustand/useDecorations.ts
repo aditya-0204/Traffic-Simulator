@@ -8,6 +8,8 @@ import { useUndoStore } from './useUndoStore';
 export const DecorationType = {
   tree: 'tree',
   building: 'building',
+  flyover: 'flyover',
+  roundabout: 'roundabout',
 } as const;
 
 export type DecorationTypeNames =

@@ -5,6 +5,8 @@ export const LabelNames = {
   'Toggle Connections': 'Toggle Connections',
   Tree: 'Tree',
   Building: 'Building',
+  Flyover: 'Flyover',
+  Roundabout: 'Roundabout',
 } as const;
 
 export type LabelNamesType = (typeof LabelNames)[keyof typeof LabelNames];

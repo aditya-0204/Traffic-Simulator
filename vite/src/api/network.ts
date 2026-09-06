@@ -35,10 +35,37 @@ export async function uploadNetwork(
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to upload network: ${response.statusText}`);
+    let details = response.statusText;
+
+    try {
+      const errorResponse = await response.json();
+      if (typeof errorResponse?.error === 'string' && errorResponse.error) {
+        details = errorResponse.error;
+      }
+    } catch {
+      // Ignore JSON parsing errors and fall back to the HTTP status text.
+    }
+
+    throw new Error(`Failed to upload network: ${details}`);
   }
 
   return await response.json();
+}
+
+async function readErrorDetails(response: Response) {
+  let details = response.statusText;
+
+  try {
+    const errorResponse = await response.json();
+
+    if (typeof errorResponse?.error === 'string' && errorResponse.error) {
+      details = errorResponse.error;
+    }
+  } catch {
+    // Ignore JSON parsing errors and fall back to the HTTP status text.
+  }
+
+  return details;
 }
 
 /**
@@ -61,7 +88,8 @@ export async function getSimulationOutput(
   );
 
   if (!response.ok) {
-    throw new Error(`Failed to get network output: ${response.statusText}`);
+    const details = await readErrorDetails(response);
+    throw new Error(`Failed to get network output: ${details}`);
   }
 
   return await response.json();
@@ -87,7 +115,8 @@ export async function getSimulationOutputStatistics(
   );
 
   if (!response.ok) {
-    throw new Error(`Failed to get network output: ${response.statusText}`);
+    const details = await readErrorDetails(response);
+    throw new Error(`Failed to get network output: ${details}`);
   }
 
   return await response.json();
@@ -113,9 +142,8 @@ export async function getSimulationAnalytics(
   );
 
   if (!response.ok) {
-    throw new Error(
-      `Failed to get simulation analytics: ${response.statusText}`,
-    );
+    const details = await readErrorDetails(response);
+    throw new Error(`Failed to get simulation analytics: ${details}`);
   }
 
   return await response.json();
@@ -138,7 +166,8 @@ export async function getSimulationInfo(
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to get network output: ${response.statusText}`);
+    const details = await readErrorDetails(response);
+    throw new Error(`Failed to get network output: ${details}`);
   }
 
   return await response.json();

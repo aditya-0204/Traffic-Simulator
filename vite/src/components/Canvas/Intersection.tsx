@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import React from 'react';
-import { Circle, Group } from 'react-konva';
+import { Circle, Group, Line } from 'react-konva';
 
 import { KonvaEventObject } from 'konva/lib/Node';
 
@@ -26,7 +26,8 @@ function IntersectionComponent({ node }: IntersectionProps) {
   const toolbarState = useToolbarStore();
 
   const isSelected = selector.selected === node.id;
-  const baseIntersectionSize = 25;
+  const baseIntersectionSize =
+    node.type === 'roundabout' ? 156 : node.type === 'flyover' ? 32 : 25;
 
   const [showIntersectionTooltip, setShowIntersectionTooltip] = useState(false);
 
@@ -59,7 +60,12 @@ function IntersectionComponent({ node }: IntersectionProps) {
     else if (
       selector.selected !== node.id &&
       network.nodes[selector.selected] &&
-      [LabelNames.Road, LabelNames.Intersection].includes(
+      [
+        LabelNames.Road,
+        LabelNames.Intersection,
+        LabelNames.Roundabout,
+        LabelNames.Flyover,
+      ].includes(
         // @ts-expect-error - Typescript things we are trying to assign, but really we are checking if it exists in the array
         toolbarState.selectedToolBarItem,
       )
@@ -102,6 +108,8 @@ function IntersectionComponent({ node }: IntersectionProps) {
 
   const tooltipText = `Type: ${prettyPrintIntersectionType(node.type)}`;
   const isTooltipVisible = showIntersectionTooltip && !isSelected;
+  const isRoundabout = node.type === 'roundabout';
+  const isFlyover = node.type === 'flyover';
 
   return (
     <Group
@@ -109,16 +117,64 @@ function IntersectionComponent({ node }: IntersectionProps) {
       onMouseEnter={toggleTooltip}
       onMouseLeave={toggleTooltip}
     >
-      <Circle
-        x={node.x}
-        y={node.y}
-        radius={size / 2}
-        fill="grey"
-        stroke={isSelected ? highlightColor : 'transparent'}
-        strokeWidth={4}
-        draggable
-        onDragEnd={handleDragMove}
-      />
+      {isRoundabout ? (
+        <>
+          <Circle
+            x={node.x}
+            y={node.y}
+            radius={size / 2}
+            fill="#6b7280"
+            stroke={isSelected ? highlightColor : 'transparent'}
+            strokeWidth={4}
+            draggable
+            onDragEnd={handleDragMove}
+          />
+          <Circle x={node.x} y={node.y} radius={Math.max(size / 3.1, 10)} fill="#f3f4f6" />
+        </>
+      ) : isFlyover ? (
+        <>
+          <Circle
+            x={node.x}
+            y={node.y}
+            radius={size / 2}
+            fill="#6b7280"
+            stroke={isSelected ? highlightColor : 'transparent'}
+            strokeWidth={4}
+            draggable
+            onDragEnd={handleDragMove}
+          />
+          <Line
+            points={[node.x - size / 2.4, node.y + size / 4.2, node.x + size / 2.4, node.y - size / 4.2]}
+            stroke="#f9fafb"
+            strokeWidth={3}
+            dash={[8, 6]}
+            lineCap="round"
+          />
+          <Line
+            points={[node.x - size / 4.5, node.y + size / 2.6, node.x - size / 7, node.y + size / 8]}
+            stroke="#9ca3af"
+            strokeWidth={4}
+            lineCap="round"
+          />
+          <Line
+            points={[node.x + size / 7, node.y - size / 8, node.x + size / 4.5, node.y - size / 2.6]}
+            stroke="#9ca3af"
+            strokeWidth={4}
+            lineCap="round"
+          />
+        </>
+      ) : (
+        <Circle
+          x={node.x}
+          y={node.y}
+          radius={size / 2}
+          fill="grey"
+          stroke={isSelected ? highlightColor : 'transparent'}
+          strokeWidth={4}
+          draggable
+          onDragEnd={handleDragMove}
+        />
+      )}
       <NodeTooltip
         text={tooltipText}
         visible={isTooltipVisible}

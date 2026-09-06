@@ -102,8 +102,10 @@ export const useNetworkStore = create<Network>((set, get) => ({
 
       const pointA = { x: from.x, y: from.y };
       const pointB = { x: to.x, y: to.y };
+      const allowCrossingForFlyover =
+        from.type === 'flyover' && to.type === 'flyover';
 
-      if (edgeDoesIntersect(state, pointA, pointB)) {
+      if (!allowCrossingForFlyover && edgeDoesIntersect(state, pointA, pointB)) {
         return state;
       } else {
         undoStore.pushCommand(new AddEdgeCommand(get(), newEdge));

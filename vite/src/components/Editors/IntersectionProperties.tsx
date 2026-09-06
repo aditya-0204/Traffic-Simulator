@@ -37,6 +37,15 @@ export function IntersectionPropertiesEditor() {
     selected.deselect();
   }
 
+  function deleteSelectedNode() {
+    if (selected.selected === null || !network.nodes[selected.selected]) {
+      return;
+    }
+
+    network.deleteNode(selected.selected);
+    selected.deselect();
+  }
+
   return (
     <ColumnStack style={{ gap: 8 }}>
       <RowStack>
@@ -60,6 +69,12 @@ export function IntersectionPropertiesEditor() {
         onClick={submitIntersectionProperties}
       >
         Save
+      </button>
+      <button
+        className="rounded-full py-2 px-4 text-white z-10 bg-red-500"
+        onClick={deleteSelectedNode}
+      >
+        Delete Node
       </button>
     </ColumnStack>
   );
